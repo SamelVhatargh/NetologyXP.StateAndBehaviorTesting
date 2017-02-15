@@ -23,7 +23,7 @@ suite('When barmen pours drinks', function () {
             emptyCupboard.empty = true;
         });
 
-        test('sms to buy drink is sent to boss', function () {
+      /*  test('sms to buy drink is sent to boss', function () {
             let smsService = new SmsServiceFake();
             barmen = new Barmen(emptyCupboard, smsService);
 
@@ -62,7 +62,22 @@ suite('When barmen pours drinks', function () {
             barmen.pour("vodka", 100, visitor);
 
             assert.equal(true, barmen.wasSmsSent);
-        });
+        });*/
+
+
+        test('barmen sends sms to buy keg', function () {
+            let smsService = new SmsService();
+            let smsServiceMock = sinon.mock(smsService);
+            barmen = new Barmen(emptyCupboard, smsService);
+            smsServiceMock.expects("send")
+                .once()
+                .withArgs("Напиток Вода закончился. Закажите еще кегу.");
+
+            barmen.pour("Вода", 100, visitor);
+
+            smsServiceMock.verify();
+            smsServiceMock.restore();
+        })
 
     });
 
