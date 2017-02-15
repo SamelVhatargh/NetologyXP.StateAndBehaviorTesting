@@ -6,6 +6,7 @@ var sinon = require('sinon');
 
 var SmsService = require('../src/sms-service');
 var Visitor = require('../src/visitor');
+var AccountBook = require('../src/account-book');
 var CupboardFake = require('../tests/fakes/cupboard-fake');
 var SmsServiceFake = require('../tests/fakes/sms-service-fake');
 
@@ -81,4 +82,37 @@ suite('When barmen pours drinks', function () {
 
     });
 
+    suite('cupboard is full', function () {
+        let visitor = {};
+        let barmen = {};
+        let fullCupboard = {};
+
+        setup(function () {
+            visitor = new Visitor();
+            visitor.sober();
+
+            fullCupboard = new CupboardFake();
+            fullCupboard.empty = true;
+        });
+
+
+        test('barmen add entry to account book when users pays for drink', function () {
+            let accountBook = new AccountBook();
+            let accountBookMock = sinon.mock(accountBook);
+            barmen = new Barmen(fullCupboard, new SmsServiceFake(), accountBook);
+            let drink = 'Вода';
+            let volume = 100;
+            let cost = 1;
+            accountBookMock.expects('addEntry')
+                .once()
+                .withArgs(drink, volume, cost);
+
+            barmen.pour(drink, volume, visitor);
+            visitor.pay(cost, barmen);
+
+            accountBookMock.verify();
+            accountBookMock.restore();
+        })
+
+    });
 });
