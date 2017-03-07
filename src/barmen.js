@@ -16,7 +16,7 @@ class Barmen {
 
     pour(drinkName, volume, visitor) {
         if (!this._cupboard.hasDrink(drinkName, volume)) {
-            this._smsService.send("Напиток " + drinkName + " закончился. Закажите еще кегу.");
+            this._smsService.send("Напиток " + drinkName + " закончился. Закажите еще кегу пожалуйста.");
             this._wasSmsSent = true;
         }
 
