@@ -72,7 +72,7 @@ suite('When barmen pours drinks', function () {
             barmen = new Barmen(emptyCupboard, smsService);
             smsServiceMock.expects("send")
                 .once()
-                .withArgs("Напиток Вода закончился. Закажите еще кегу.");
+                .withArgs("Напиток Вода закончился. Закажите еще кегу пожалуйста.");
 
             barmen.pour("Вода", 100, visitor);
 
